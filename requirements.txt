@@ -1,0 +1,11 @@
+Flask
+requests
+python-dotenv
+jsonschema
+sqlalchemy 
+psycopg2-binary
+flask-migrate
+flask-cors
+pytest
+pydantic==1.10.15
+
