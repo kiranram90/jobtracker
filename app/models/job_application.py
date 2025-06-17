@@ -10,7 +10,7 @@ class JobApplication(db.Model):
     job_title = Column(String, nullable=False)
     company_name = Column(String, nullable=False)
     posting= Column(String, nullable=False)
-    status = db.Column(db.String(50), default='applied')
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    status = Column(String(50), default='applied')
+    notes = Column(Text)
+    created_at = Column(datetime)
     

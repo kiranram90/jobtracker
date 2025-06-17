@@ -17,5 +17,6 @@ def create_application():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No input data provided"}), 400
+    breakpoint
     app = JobApplicationRepository.create(data)
     return jsonify({"id" : app.id, "message": "Application created successfully"}), 201
