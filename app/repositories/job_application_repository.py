@@ -1,4 +1,4 @@
-from models.job_application import JobApplication
+from app.models.job_application import JobApplication
 from app import db
 
 
