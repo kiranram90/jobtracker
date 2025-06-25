@@ -17,6 +17,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
+    from app import models
+
     # Import and register blueprints here
     from app.controllers.application_controller import application_bp
     app.register_blueprint(application_bp)

@@ -10,11 +10,11 @@ def get_applications():
     return jsonify([JobApplicationDTO.from_orm(apps).dict() for app in apps]), 200
 
 
-@application_bp.route('/application', methods=['POST'])
+@application_bp.route('/applications', methods=['POST'])
 def create_application():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No input data provided"}), 400
     breakpoint
     app = JobApplicationRepository.create(data)
-    return jsonify({"id" : app.id, "message": "Application created successfully"}), 201
+    return jsonify({ "message": "Application created successfully"}), 201

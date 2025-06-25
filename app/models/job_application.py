@@ -6,8 +6,8 @@ from datetime import datetime
 
 class JobApplication(db.Model):
     __tablename__ = 'job_applications'
-    
-    user_id = Column(UUID,ForeignKey('user.id'),primary_key=True)
+    id = Column(Integer, primary_key=True)
+    user_id = Column(UUID,ForeignKey('users.id'))
     job_title = Column(String, nullable=False)
     company_name = Column(String, nullable=False)
     posting= Column(String, nullable=False)
