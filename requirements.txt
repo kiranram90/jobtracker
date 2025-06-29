@@ -8,4 +8,6 @@ flask-migrate
 flask-cors
 pytest
 pydantic==1.10.15
+flask-login 
+flask-bcrypt
 

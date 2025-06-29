@@ -18,3 +18,5 @@ def create_application():
     breakpoint
     app = JobApplicationRepository.create(data)
     return jsonify({ "message": "Application created successfully"}), 201
+
+
