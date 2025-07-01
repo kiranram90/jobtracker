@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
-from app import db
+from app.extensions import db
 from app.models.users import User
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, logout_user, login_required, current_user
-from dto.user_dto import UserDTO
+from app.dto.user_dto import UserDTO
 
 
 Bcrypt = Bcrypt()
@@ -15,7 +15,7 @@ def register():
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({"error": "Email and password are required"}), 400
     
-    user_dto = UserDTO.from_dict(data) 
+    user_dto = UserDTO.parse_obj(data) 
     if User.query.filter_by(email=user_dto.email).first():
         return jsonify({"error": "User already exists"}), 400   
     hashed_password = Bcrypt.generate_password_hash(data['password']).decode('utf-8')

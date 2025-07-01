@@ -3,14 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
-from flask_login import LoginManager
-from app.models.users import User
-from app.controllers.auth_controller import auth_bp
+from app.extensions import db, migrate, login_manager
 
-
-db = SQLAlchemy()
-migrate = Migrate()
-login_manager = LoginManager()
 
 def create_app():
     load_dotenv()
@@ -24,13 +18,16 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
+
+    from app.models.users import User
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
-    
-    
+
+
 
     # Import and register blueprints here
+    from app.controllers.auth_controller import auth_bp 
     from app.controllers.application_controller import application_bp
     app.register_blueprint(application_bp)
     app.register_blueprint(auth_bp)
