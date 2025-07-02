@@ -25,6 +25,18 @@ class JobApplicationRepository():
         db.session.add(new_application)
         db.session.commit()
         return new_application
+    
+    @staticmethod
+    def update(app, data):
+        for key, value in data:
+            setattr(app, key, value)
+        db.session.commit()
 
+    @staticmethod
+    def delete(app):
+        db.session.delete(app)
+        db.session.commit()
+        
+        
 
     
