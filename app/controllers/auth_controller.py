@@ -30,7 +30,7 @@ def login():
     data = request.get_json()
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({"error": "Email and password are required"}), 400   
-    user_dto = UserDTO.from_dict(data)
+    user_dto = UserDTO.parse_obj(data)
     user = User.query.filter_by(email=user_dto.email).first()
     if user and Bcrypt.check_password_hash(user.password_hash, user_dto.password):
         login_user(user)
