@@ -13,3 +13,20 @@ def test_register(client):
     # Confirm user exists
     user = User.query.filter_by(email="test@example.com").first()
     assert user is not None
+
+def test_login(client):
+
+    client.post("/auth/register", json={
+        "email": "login@example.com",
+        "password": "loginpassword"
+    })
+
+    response = client.post("/auth/login", json={
+        "email": "login@example.com",
+        "password": "loginpassword"
+    })
+    assert response.status_code == 200
+    assert b'Login successful' in response.data
+
+
+
