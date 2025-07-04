@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app.dto.user_dto import UserDTO
 
 
-Bcrypt = Bcrypt()
+bcrypt = Bcrypt()
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
 @auth_bp.route('/register', methods=['POST'])
@@ -18,7 +18,7 @@ def register():
     user_dto = UserDTO.parse_obj(data) 
     if User.query.filter_by(email=user_dto.email).first():
         return jsonify({"error": "User already exists"}), 400   
-    hashed_password = Bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
     new_user = User(email=user_dto.email, password_hash=hashed_password)
     db.session.add(new_user)
     db.session.commit()
@@ -32,7 +32,7 @@ def login():
         return jsonify({"error": "Email and password are required"}), 400   
     user_dto = UserDTO.parse_obj(data)
     user = User.query.filter_by(email=user_dto.email).first()
-    if user and Bcrypt.check_password_hash(user.password_hash, user_dto.password):
+    if user and bcrypt.check_password_hash(user.password_hash, user_dto.password):
         login_user(user)
         return jsonify({"message": "Login successful"}), 200
     return jsonify({"error": "Invalid email or password"}), 401
