@@ -28,7 +28,7 @@ class JobApplicationRepository():
     
     @staticmethod
     def update(app, data):
-        for key, value in data:
+        for key, value in data.items():
             setattr(app, key, value)
         db.session.commit()
 

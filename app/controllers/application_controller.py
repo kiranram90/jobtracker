@@ -21,7 +21,7 @@ def create_application():
     app = JobApplicationRepository.create(data)
     return jsonify({ "message": "Application created successfully"}), 201
 
-@application_bp.route('/applications/<int:app_id>', methods=['GET'])
+@application_bp.route('/applications/<int:app_id>', methods=['PUT'])
 @login_required
 def update_application(app_id):
     data = request.get_json()
@@ -30,6 +30,8 @@ def update_application(app_id):
     app = JobApplicationRepository.get_by_id(app_id)
     if not app:
         return jsonify({"error": "Application not found"}), 404
+    JobApplicationRepository.update(app, request.json)
+    return jsonify({"message": "Updated"}), 200
     
 @application_bp.route('/applications/<int:app_id>', methods=['DELETE'])
 @login_required
