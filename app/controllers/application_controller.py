@@ -2,8 +2,20 @@ from flask import Blueprint, request, jsonify
 from app.repositories.job_application_repository import JobApplicationRepository
 from app.dto.job_application_dto import JobApplicationDTO
 from flask_login import login_required
+from flask import render_template, redirect, url_for
+
+
 
 application_bp = Blueprint('application_bp', __name__,)
+
+
+@application_bp.route('/applications-page', methods=['GET'])
+@login_required
+def applications_page():
+    apps = JobApplicationRepository.get_all()
+    return render_template('applications.html', applications=apps)
+
+
 # This controller handles job application related routes
 @application_bp.route('/applcations', methods=['GET'])
 @login_required

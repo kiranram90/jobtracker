@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Applications{% endblock %}
+
+{% block content %}
+  <h2>Your Job Applications</h2>
+
+  <ul class="list-group">
+    {% for app in applications %}
+      <li class="list-group-item">
+        <strong>{{ app.job_title }}</strong> at {{ app.company_name }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="/auth/logout" class="btn btn-secondary mt-3">Logout</a>
+{% endblock %}

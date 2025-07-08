@@ -5,7 +5,7 @@ from app import db
 class JobApplicationRepository():
     @staticmethod
     def get_all():
-        return JobApplication.query.order_by(JobApplicationRepository.created_at.desc()).all()
+        return JobApplication.query.all()
 
     @staticmethod
     def get_by_id(app_id):
