@@ -24,6 +24,11 @@ def get_applications():
     return jsonify([JobApplicationDTO.from_orm(apps).dict() for app in apps]), 200
 
 
+@application_bp.route('/applications/new_app', methods=['GET'])
+@login_required
+def new_application_form():
+    return render_template('new_application_form.html')
+
 @application_bp.route('/applications', methods=['POST'])
 @login_required
 def create_application():
