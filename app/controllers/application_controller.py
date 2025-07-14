@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.repositories.job_application_repository import JobApplicationRepository
 from app.dto.job_application_dto import JobApplicationDTO
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask import render_template, redirect, url_for
 
 
@@ -32,11 +32,12 @@ def new_application_form():
 @application_bp.route('/applications', methods=['POST'])
 @login_required
 def create_application():
-    data = request.get_json()
-    if not data:
+    data = request.form.to_dict()
+    data['user_id'] = current_user.id
+    if not data or not data.keys():
         return jsonify({"error": "No input data provided"}), 400
     app = JobApplicationRepository.create(data)
-    return jsonify({ "message": "Application created successfully"}), 201
+    return redirect(url_for('application_bp.applications_page'))
 
 @application_bp.route('/applications/<int:app_id>', methods=['PUT'])
 @login_required

@@ -8,7 +8,7 @@
 </head>
 <body class="container mt-5">
   <h1>Create Job Application</h1>
-  <form method="POST" action="{{ url_for('application_bp.new_application_form') }}">
+  <form method="POST" action="{{ url_for('application_bp.create_application') }}">
     <div class="mb-3">
       <label for="job_title" class="form-label">Job Title</label>
       <input type="text" class="form-control" id="job_title" name="job_title" required>

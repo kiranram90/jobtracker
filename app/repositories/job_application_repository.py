@@ -20,7 +20,7 @@ class JobApplicationRepository():
             company_name=application_data['company_name'],
             posting=application_data['posting'],
             status=application_data.get('status', 'applied'),
-            notes=application_data.get('notes', ''),
+            notes=application_data.get('notes', '')
         )
         db.session.add(new_application)
         db.session.commit()
