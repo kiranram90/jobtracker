@@ -29,6 +29,9 @@ def create_app():
     # Import and register blueprints here
     from app.controllers.auth_controller import auth_bp 
     from app.controllers.application_controller import application_bp
+    from app.controllers.main_controller import main_bp
+
+    app.register_blueprint(main_bp)
     app.register_blueprint(application_bp)
     app.register_blueprint(auth_bp)
 
