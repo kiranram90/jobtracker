@@ -6,8 +6,18 @@
 
   <ul class="list-group">
     {% for app in applications %}
-      <li class="list-group-item">
-        <strong>{{ app.job_title }}</strong> at {{ app.company_name }}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ app.job_title }}</strong> at {{ app.company_name }}
+        </div>
+        <div>
+          <a href="{{ url_for('application_bp.update_application', app_id=app.id) }}"
+             class="btn btn-sm btn-primary me-2">Update</a>
+          <form action="{{ url_for('application_bp.delete_application', app_id=app.id) }}"
+                method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
       </li>
     {% endfor %}
   </ul>

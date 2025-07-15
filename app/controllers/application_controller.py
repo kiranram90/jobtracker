@@ -22,12 +22,20 @@ def applications_page():
 def get_applications():
     apps = JobApplicationRepository.get_all()
     return jsonify([JobApplicationDTO.from_orm(apps).dict() for app in apps]), 200
+    
 
 
 @application_bp.route('/applications/new_app', methods=['GET'])
 @login_required
 def new_application_form():
     return render_template('new_application_form.html')
+
+
+@application_bp.route('/applications/<int:app_id>')
+@login_required
+def edit_application_form(app_id):
+    app = JobApplicationRepository.get_by_id(app_id)
+    return render_template('new_application_form.html', application=app)
 
 @application_bp.route('/applications', methods=['POST'])
 @login_required
@@ -37,9 +45,9 @@ def create_application():
     if not data or not data.keys():
         return jsonify({"error": "No input data provided"}), 400
     app = JobApplicationRepository.create(data)
-    return redirect(url_for('application_bp.applications_page'))
+    return redirect(url_for('application_bp.applications_page')), 201
 
-@application_bp.route('/applications/<int:app_id>', methods=['PUT'])
+@application_bp.route('/applications/<int:app_id>', methods=['POST'])
 @login_required
 def update_application(app_id):
     data = request.get_json()
@@ -51,11 +59,11 @@ def update_application(app_id):
     JobApplicationRepository.update(app, request.json)
     return jsonify({"message": "Updated"}), 200
     
-@application_bp.route('/applications/<int:app_id>', methods=['DELETE'])
+@application_bp.route('/applications/<int:app_id>', methods=['POST'])
 @login_required
 def delete_application(app_id):
     app = JobApplicationRepository.get_by_id(app_id)
     if not app:
         return jsonify({"error": "Application not found"}), 404
     JobApplicationRepository.delete(app)
-    return jsonify({"message": "Application deleted successfully"}), 200
+    return redirect(url_for('application_bp.applications_page')), 201
