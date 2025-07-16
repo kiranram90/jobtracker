@@ -37,7 +37,7 @@ def edit_application_form(app_id):
     app = JobApplicationRepository.get_by_id(app_id)
     return render_template('new_application_form.html', application=app)
 
-@application_bp.route('/applications', methods=['POST'])
+@application_bp.route('/applications', methods=['POST', 'GET'])
 @login_required
 def create_application():
     data = request.form.to_dict()

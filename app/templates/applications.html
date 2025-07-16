@@ -4,6 +4,11 @@
 {% block content %}
   <h2>Your Job Applications</h2>
 
+  <!-- ✅ Create button -->
+  <a href="{{ url_for('application_bp.new_application_form') }}" class="btn btn-success mb-3">
+    + New Application
+  </a>
+
   <ul class="list-group">
     {% for app in applications %}
       <li class="list-group-item d-flex justify-content-between align-items-center">

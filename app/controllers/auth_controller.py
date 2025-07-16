@@ -60,8 +60,8 @@ def login():
     return jsonify({"error": "Invalid email or password"}), 401
 
 
-@auth_bp.route('/logout', methods=['POST'])
+@auth_bp.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
-    return jsonify({"message": "Logout successful"}), 200
+    return redirect(url_for('auth_bp.login_form'))
