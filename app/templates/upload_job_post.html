@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Job Post{% endblock %}
+
+{% block content %}
+  <h2>Upload Job Post for Resume Feedback</h2>
+
+  <form action="{{ url_for('application_bp.upload_job_post') }}" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="job_post" class="form-label">Upload Job Post (PDF or text)</label>
+      <input type="file" class="form-control" name="job_post" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="resume_bullets" class="form-label">Your Current Resume Bullets</label>
+      <textarea name="resume_bullets" rows="5" class="form-control" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Get Resume Feedback</button>
+  </form>
+{% endblock %}

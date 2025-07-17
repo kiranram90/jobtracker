@@ -3,10 +3,45 @@ from app.repositories.job_application_repository import JobApplicationRepository
 from app.dto.job_application_dto import JobApplicationDTO
 from flask_login import login_required, current_user
 from flask import render_template, redirect, url_for
-
+from PyPDF2 import PdfReader
 
 
 application_bp = Blueprint('application_bp', __name__,)
+
+
+@application_bp.route('/upload_job_post', methods=['GET', 'POST'])
+@login_required
+def upload_job_post():
+    if request.method == 'POST':
+        uploaded_file = request.files('job_post')
+        resume_file = request.form('resume_bullets')
+
+        if uploaded_file.endswith('.pdf'):
+            text = extract_text_from_pdf(uploaded_file)
+        else:
+            text = uploaded_file.read().decode('utf-8')
+
+
+        feedback = get_resume_feedback(job_text=text,resume_bullets = resume_file)
+
+        return render_template('feedback.html', feedback=feedback)
+
+    return render_template('upload_job_post.html') 
+
+
+def get_resume_feedback(job_text, resume_bullets):
+    
+
+
+
+
+def extract_text_from_pdf(file):
+    reader = PdfReader(file)
+    text = ''
+    for page in reader.pages:
+        text += page.extract_text() or ''
+    return text
+    
 
 
 @application_bp.route('/applications-page', methods=['GET'])
