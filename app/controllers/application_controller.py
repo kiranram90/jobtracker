@@ -4,6 +4,7 @@ from app.dto.job_application_dto import JobApplicationDTO
 from flask_login import login_required, current_user
 from flask import render_template, redirect, url_for
 from PyPDF2 import PdfReader
+import requests
 
 
 application_bp = Blueprint('application_bp', __name__,)
@@ -13,26 +14,45 @@ application_bp = Blueprint('application_bp', __name__,)
 @login_required
 def upload_job_post():
     if request.method == 'POST':
-        uploaded_file = request.files('job_post')
-        resume_file = request.form('resume_bullets')
+        uploaded_file = request.files['job_post']
+        resume_file = request.form['resume_bullets']
 
-        if uploaded_file.endswith('.pdf'):
+        if uploaded_file.filename.endswith('.pdf'):
             text = extract_text_from_pdf(uploaded_file)
         else:
             text = uploaded_file.read().decode('utf-8')
 
 
-        feedback = get_resume_feedback(job_text=text,resume_bullets = resume_file)
+        feedback = get_resume_feedback_with_ollama(job_post=text,resume_bullets = resume_file)
 
         return render_template('feedback.html', feedback=feedback)
 
     return render_template('upload_job_post.html') 
 
 
-def get_resume_feedback(job_text, resume_bullets):
-    
+def get_resume_feedback_with_ollama(job_post, resume_bullets):
+    prompt = f"""
+    Here is the job description:
+    ---
+    {job_post}
 
+    Here are my current resume bullets:
+    ---
+    {resume_bullets}
 
+    Please provide improved, personalized resume bullets tailored specifically for this job.
+    """
+
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "llama3",   # Or whatever local model you have pulled (e.g. mistral, phi3, etc.)
+            "prompt": prompt
+        }
+    )
+
+    output = response.json()
+    return output.get('response', 'No response from LLM')
 
 
 def extract_text_from_pdf(file):
