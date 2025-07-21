@@ -4,7 +4,7 @@ from app.dto.job_application_dto import JobApplicationDTO
 from flask_login import login_required, current_user
 from flask import render_template, redirect, url_for
 from PyPDF2 import PdfReader
-import requests
+import requests, json
 
 
 application_bp = Blueprint('application_bp', __name__,)
@@ -22,7 +22,7 @@ def upload_job_post():
         else:
             text = uploaded_file.read().decode('utf-8')
 
-
+        
         feedback = get_resume_feedback_with_ollama(job_post=text,resume_bullets = resume_file)
 
         return render_template('feedback.html', feedback=feedback)
@@ -43,17 +43,24 @@ def get_resume_feedback_with_ollama(job_post, resume_bullets):
     Please provide improved, personalized resume bullets tailored specifically for this job.
     """
 
+    payload = {
+        "prompt": prompt,
+        "model": "llama3",
+    }
+
     response = requests.post(
         "http://localhost:11434/api/generate",
-        json={
-            "model": "llama3",   # Or whatever local model you have pulled (e.g. mistral, phi3, etc.)
-            "prompt": prompt
-        }
+        json=payload,
+        stream=True # IMPORTANT: tells requests to yield chunks
     )
-
-    output = response.json()
-    return output.get('response', 'No response from LLM')
-
+    
+    output = ''
+    for line in response.iter_lines():
+        if line:
+            chunk = json.loads(line)
+            output += chunk.get('response', "")
+    print(chunk)
+    return output
 
 def extract_text_from_pdf(file):
     reader = PdfReader(file)
